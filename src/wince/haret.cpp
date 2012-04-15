@@ -43,7 +43,10 @@ struct linload_header {
 
 static FILE *exeFile;
 static struct linload_header header;
-
+HANDLE hWindowTreeUpdater = NULL;
+typedef HRESULT (*CREATEWINDOWTREEUPDATER)(HWND hWnd, DWORD unk, HANDLE *hWindowTreeUpdater);
+typedef HRESULT (*UPDATEWINDOWTREE)(HANDLE hWindowTreeUpdater);
+typedef HRESULT (*DESTROYWINDOWTREEUPDATER)(HANDLE hWindowTreeUpdater);
 static BOOL CALLBACK DialogFunc (HWND hWnd, UINT message, WPARAM wParam,
   LPARAM lParam)
 {
@@ -53,6 +56,17 @@ static BOOL CALLBACK DialogFunc (HWND hWnd, UINT message, WPARAM wParam,
     {
       Output("In initdialog");
       MainWindow = hWnd;
+
+	//Load the WindowTreeUpdater library, which allows
+	//the native WinCE controls to be included in the 
+	//metro window frame system
+	HINSTANCE hLibrary = ::LoadLibrary(L"\\Windows\\WindowTreeUpdater.dll");
+
+	//Get the function we need (defined above)    
+	CREATEWINDOWTREEUPDATER createWindowTreeUpdater = (CREATEWINDOWTREEUPDATER)GetProcAddress(hLibrary, L"CreateWindowTreeUpdater");
+	
+	//Stuff our handle into the tree updater
+        createWindowTreeUpdater(hWnd, 1, &hWindowTreeUpdater);
 
       wchar_t title[200];
       _snwprintf(title, ARRAY_SIZE(title), L"HaRET Version %hs", VERSION);
@@ -108,8 +122,8 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
     // Setup haret.
     setupHaret();
 
-    if (try_linboot())
-	return 0;
+    //if (try_linboot())
+	//return 0;
 
     // Initialize sockets
     Output("Running WSAStartup");
@@ -118,6 +132,10 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     /* To avoid fiddling with message queues et al we just fire up a
      * regular dialog window */
+
+	//Start up sockets early, better for testing
+	//(should probably be in startup.txt, actually. ohwell)
+	startListen(9999);
     Output("Starting gui");
     DialogBox(hInstance, MAKEINTRESOURCE(DLG_HaRET), HWND_DESKTOP, DialogFunc);
 

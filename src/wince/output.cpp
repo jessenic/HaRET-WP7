@@ -276,9 +276,11 @@ prepThread()
     // All wince 3.0 and later machines are automatically in "kernel
     // mode".  We enable kernel mode by default to make older PDAs
     // (ce2.x) work.
-    Output("Setting KMode to true.");
-    int kmode = SetKMode(TRUE);
-    Output("Old KMode was %d", kmode);
+
+
+//    Output("Setting KMode to true.");
+//    int kmode = SetKMode(TRUE);
+  //  Output("Old KMode was %d", kmode);
 }
 
 // Initialize the haret application.

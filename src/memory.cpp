@@ -320,7 +320,8 @@ err:  VirtualFree (pmWindow, 0, MEM_RELEASE);
   if (slot >= PHYS_CACHE_COUNT)
   {
     // Go into supervisor mode
-    SetKMode (TRUE);
+
+    //SetKMode (TRUE);
     cli ();
     cpuFlushCache ();
 
@@ -333,7 +334,8 @@ err:  VirtualFree (pmWindow, 0, MEM_RELEASE);
 
     // Back to user mode
     sti ();
-    SetKMode (FALSE);
+
+//    SetKMode (FALSE);
   }
 
   // Move least recently used slot to front
@@ -354,12 +356,12 @@ void memPhysReset ()
   if (pmInited)
   {
     // Go into supervisor mode
-    SetKMode (TRUE);
+    //SetKMode (TRUE);
     cpuFlushCache ();
     // Restore the page table entries
     for (int i = 0; i < 16 * PHYS_CACHE_COUNT; i++)
       pmPT [i] = pmOldPT [i];
-    SetKMode (FALSE);
+    //SetKMode (FALSE);
 
     VirtualFree (pmL2PT, 0, MEM_RELEASE);
     VirtualFree (pmWindow, 0, MEM_RELEASE);
