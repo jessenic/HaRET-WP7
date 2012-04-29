@@ -35,33 +35,7 @@ static const int PADOUTBUF = 32;
 static void
 writeScreen(const char *msg, uint len)
 {
-    if (MainWindow == 0)
-        return;
-
-    wchar_t buff[MAXOUTBUF];
-    mbstowcs(buff, msg, ARRAY_SIZE(buff));
-
-    HWND hConsole = GetDlgItem(MainWindow, ID_LOG);
-    uint maxlen = SendMessage(hConsole, EM_GETLIMITTEXT, 0, 0);
-
-    if (len >= maxlen)
-        // Message wont fit on screen.
-        return;
-
-    // Remove lines until there is space in screen log
-    uint tl;
-    for (;;) {
-        tl = GetWindowTextLength(hConsole);
-        if (tl + len < maxlen)
-            break;
-        uint linelen = SendMessage(hConsole, EM_LINELENGTH, 0, 0) + 2;
-        Edit_SetSel(hConsole, 0, linelen);
-        Edit_ReplaceSel(hConsole, "");
-    }
-
-    // Paste message to screen log
-    Edit_SetSel(hConsole, tl, tl);
-    Edit_ReplaceSel(hConsole, buff);
+	return;
 }
 
 void
@@ -73,9 +47,9 @@ Status(const wchar_t *format, ...)
     _vsnwprintf(buffer, ARRAY_SIZE(buffer), format, args);
     va_end(args);
 
-    HWND sb = GetDlgItem(MainWindow, ID_STATUSTEXT);
-    if (sb)
-        SetWindowText(sb, buffer);
+    //HWND sb = GetDlgItem(MainWindow, ID_STATUSTEXT);
+    //if (sb)
+    //    SetWindowText(sb, buffer);
 }
 
 static void
@@ -255,7 +229,7 @@ preparePath()
 {
     // Locate the directory containing the haret executable.
     wchar_t sp[200];
-    GetModuleFileName(hInst, sp, ARRAY_SIZE(sp));
+    GetModuleFileName(NULL, sp, ARRAY_SIZE(sp));
     int len = wcstombs(SourcePath, sp, sizeof(SourcePath));
     char *x = SourcePath + len;
     while ((x > SourcePath) && (x[-1] != '\\'))
@@ -354,24 +328,6 @@ static struct ProgressFeedback {
     uint lastProgress, lastShownProgress, showStep;
 } progressFeedback;
 
-static BOOL CALLBACK
-pbDialogFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch (message) {
-    case WM_INITDIALOG:
-        return TRUE;
-
-    case WM_COMMAND:
-        switch (LOWORD(wParam)) {
-        case IDOK:
-        case IDCANCEL:
-            EndDialog(hWnd, LOWORD(wParam));
-            return TRUE;
-        }
-        break;
-    }
-    return FALSE;
-}
 
 bool InitProgress(int dialogId, uint Max)
 {
@@ -379,9 +335,9 @@ bool InitProgress(int dialogId, uint Max)
     progressFeedback.oldCursor = (HCURSOR)-1;
 #endif
 
-    progressFeedback.window = CreateDialog(hInst, MAKEINTRESOURCE(dialogId)
-                                           , MainWindow, pbDialogFunc);
-    if (!progressFeedback.window)
+    //progressFeedback.window = CreateDialog(hInst, MAKEINTRESOURCE(dialogId)
+    //                                       , MainWindow, pbDialogFunc);
+    //if (!progressFeedback.window)
         return false;
 
     progressFeedback.slider = GetDlgItem(progressFeedback.window, dialogId + 1);
