@@ -14,10 +14,9 @@ VERSION=pre-0.5.3-$(shell date +"%Y%m%d_%H%M%S")
 OUT=out/
 
 # Default compiler flags (note -march=armv4 is needed for 16 bit insns)
-CXXFLAGS = -Wall -O -g -MD -march=armv6 -Iinclude -fno-exceptions -fno-rtti
-CXXFLAGS_ARMV4 = -Wall -O -g -MD -march=armv4 -Iinclude -fno-exceptions -fno-rtti
+CXXFLAGS = -Wall -O -g -MD -march=armv4 -Iinclude -fno-exceptions -fno-rtti
 CXXFLAGS_ARMV5 = -Wall -O -g -MD -march=armv5 -Iinclude -fno-exceptions -fno-rtti
-LDFLAGS = -Wl,--major-subsystem-version=2,--minor-subsystem-version=10 -static-libgcc
+LDFLAGS = -Wl,--major-subsystem-version=2,--minor-subsystem-version=10
 # LDFLAGS to debug invalid imports in exe
 #LDFLAGS = -Wl,-M -Wl,--cref
 
@@ -52,14 +51,9 @@ STRIP = arm-mingw32ce-strip
 DLLTOOL = arm-mingw32ce-dlltool
 DLLTOOLFLAGS =
 
-define compile_armv6
-@echo "  Compiling (armv6) $1"
-$(Q)$(CXX) $(CXXFLAGS) -c $1 -o $2
-endef
-
 define compile_armv4
 @echo "  Compiling (armv4) $1"
-$(Q)$(CXX) $(CXXFLAGS_ARMV4) -c $1 -o $2
+$(Q)$(CXX) $(CXXFLAGS) -c $1 -o $2
 endef
 
 define compile_armv5
@@ -70,9 +64,7 @@ endef
 define compile
 $(if $(findstring -armv5.,$1),
 	$(call compile_armv5,$1,$2),
-	$(if $(findstring -armv4.,$1),
-		$(call compile_armv4,$1,$2),
-		$(call compile_armv6,$1,$2))
+	$(call compile_armv4,$1,$2)
 )
 endef
 
