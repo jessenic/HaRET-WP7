@@ -122,8 +122,8 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
     // Setup haret.
     setupHaret();
 
-    //if (try_linboot())
-	//return 0;
+    if (try_linboot())
+	return 0;
 
     // Initialize sockets
     Output("Running WSAStartup");
@@ -132,10 +132,6 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     /* To avoid fiddling with message queues et al we just fire up a
      * regular dialog window */
-
-	//Start up sockets early, better for testing
-	//(should probably be in startup.txt, actually. ohwell)
-	startListen(9999);
     Output("Starting gui");
     DialogBox(hInstance, MAKEINTRESOURCE(DLG_HaRET), HWND_DESKTOP, DialogFunc);
 
