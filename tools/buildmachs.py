@@ -32,7 +32,7 @@ def main():
         while line and line[-1][-1] == '\n':
             # Python 2.5 bug?
             line.pop()
-            line += reader.next()
+            line += next(reader)
         if len(line) < 3:
             if len(line) == 1 and line[0][:9] == 'PLATFORM=':
                 platform = line[0][9:]
