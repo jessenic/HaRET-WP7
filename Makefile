@@ -8,7 +8,12 @@
 #
 
 # Program version
-VERSION=pre-0.5.3-$(shell date +"%Y%m%d_%H%M%S")
+VERSIONSTR=pre-0.5.3
+ifdef BUILD_NUMBER
+    VERSION=$(VERSIONSTR)-build$(BUILD_NUMBER)
+else
+    VERSION=$(VERSIONSTR)-$(shell date +"%Y%m%d_%H%M%S")
+endif
 
 # Output directory
 OUT=out/
