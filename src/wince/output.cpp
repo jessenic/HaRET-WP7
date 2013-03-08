@@ -6,7 +6,7 @@
 */
 
 #include <windows.h>
-#include "pkfuncs.h" // SetKMode
+//#include "pkfuncs.h" // SetKMode
 #include <windowsx.h> // Edit_SetSel
 #include <commctrl.h> // TBM_SETRANGEMAX
 #include <stdio.h> // vsnprintf
