@@ -7,6 +7,7 @@
 
 #include <windows.h>
 //#include "pkfuncs.h" // SetKMode
+#include "kernelmodestuff.h"
 #include <windowsx.h> // Edit_SetSel
 #include <commctrl.h> // TBM_SETRANGEMAX
 #include <stdio.h> // vsnprintf
@@ -314,6 +315,12 @@ setupHaret()
 
     Output("Finished initializing output");
 
+    if(InitKMDriver()){
+    	Output("Initializing kernel mode driver succeeded");
+    }else{
+    	Output(C_ERROR "Initializing kernel mode driver FAILED");
+    }
+
     // Bind to DLLs dynamically.
     setup_LateLoading();
 
@@ -340,6 +347,11 @@ shutdownHaret()
 {
     Output("Shutting down");
     memPhysReset();
+    if(DeinitKMDriver()){
+    	Output("Unloading kernel mode driver succeeded");
+    }else{
+    	Output(C_ERROR "Unloading kernel mode driver FAILED");
+    }
     closeLogFile();
 }
 

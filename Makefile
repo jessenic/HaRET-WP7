@@ -26,9 +26,9 @@ LDFLAGS = -Wl,--major-subsystem-version=2,--minor-subsystem-version=10 -static-l
 # LDFLAGS to debug invalid imports in exe
 #LDFLAGS = -Wl,-M -Wl,--cref
 
-LIBS = -lwinsock
+LIBS = -lwinsock -lKMDriverWrapper -Llib/
 
-all: $(OUT) $(OUT)haret.exe $(OUT)haretconsole.tar.gz
+all: $(OUT) $(OUT)kmode_dll.dll $(OUT)haret.exe $(OUT)haretconsole.tar.gz
 
 # Run with "make V=1" to see the actual compile commands
 ifdef V
@@ -127,9 +127,15 @@ COREOBJS := $(MACHOBJS) haret-res.o libcfunc.o \
 HARETOBJS := $(COREOBJS) haret.o gpio.o uart.o wincmds.o \
   watch.o irqchain.o irq.o pxatrace.o mmumerge.o l1trace.o arminsns.o \
   network.o terminal.o com_port.o tlhcmds.o memcmds.o pxacmds.o aticmds.o \
-  imxcmds.o s3c-gpio.o msmcmds.o
+  imxcmds.o s3c-gpio.o msmcmds.o kernelmodestuff.o
 
 $(OUT)haret-debug: $(addprefix $(OUT),$(HARETOBJS)) src/haret.lds
+
+################ Kernel mode dll rules
+
+$(OUT)kmode_dll.dll:
+	$(call compile,src/kmodedll/kmode_dll.cpp,$(OUT)kmode_dll.o -DBUILDING_KMODE_DLL)
+	$(CXX) $(LDFLAGS) -shared -o $(OUT)kmode_dll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmode_dll.a
 
 ####### Stripped down linux bootloading program.
 LINLOADOBJS := $(COREOBJS) stubboot.o kernelfiles.o
