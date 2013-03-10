@@ -1,0 +1,17 @@
+LIBRARY       KMDriverWrapper
+
+EXPORTS DllMain
+	WP7InitDriverAPI
+	WP7DeinitDriverAPI
+	WP7ListRunningDrivers
+	WP7LoadDriver
+	WP7UnloadDriver
+	WP7RunInKernelMode
+	WP7SetGPIOPin
+	WP7ClearGPIOPin
+	WP7SetInputGPIOPin
+	WP7SetOutputGPIOPin
+	WP7ReadGPIOPin
+	WP7VirtualAlloc
+	WP7VirtualFree
+	WP7VirtualCopy

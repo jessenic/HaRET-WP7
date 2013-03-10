@@ -6,3 +6,9 @@ scripts*/
 
 # Ignore backup files
 *~
+
+# Ignore eclipse settings
+.cproject
+.project
+.settings*
+
