@@ -18,11 +18,11 @@ extern "C" {
 LPVOID AllocPhysMem(DWORD,DWORD,DWORD,DWORD,PULONG);
 VOID ForcePageout(void);
 BOOL FreePhysMem(LPVOID);
-DWORD GetCurrentPermissions(void);
+//DWORD GetCurrentPermissions(void);
 BOOL KernelIoControl(DWORD,LPVOID,DWORD,LPVOID,DWORD,LPDWORD);
 BOOL LockPages(LPVOID,DWORD,PDWORD,int);
 //BOOL SetKMode(BOOL);
-DWORD SetProcPermissions(DWORD);
+//DWORD SetProcPermissions(DWORD);
 void SleepTillTick();
 BOOL UnlockPages(LPVOID,DWORD);
 BOOL VirtualCopy(LPVOID,LPVOID,DWORD,DWORD);

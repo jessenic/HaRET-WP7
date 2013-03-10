@@ -12,6 +12,7 @@ bool DeinitKMDriver() {
 	return WP7DeinitDriverAPI() && WP7UnloadDriver();
 }
 
+//Example function for later use
 PROCESSOR_INFO GetProcInfo() {
 	VOID_STRUCT vs = { };
 	PROCESSOR_INFO procinfo = { };

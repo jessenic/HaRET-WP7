@@ -1,5 +1,5 @@
 #include <windows.h> // SystemParametersInfo
-#include "kernelmodestuff.h" // KernelIoControl
+#include "pkfuncs.h" // KernelIoControl
 
 #include "script.h" // REG_VAR_ROFUNC
 #include "output.h" // Output
@@ -91,8 +91,12 @@ findMachineType()
            , platform, oeminfo);
 
     // Try to lookup processor type.
-    PROCESSOR_INFO pinfo = GetProcInfo();
-    //if (ret)
+    PROCESSOR_INFO pinfo;
+    DWORD rsize;
+    memset(&pinfo, sizeof(pinfo), 0);
+    int ret = KernelIoControl(IOCTL_PROCESSOR_INFORMATION, NULL, 0
+                    , &pinfo, sizeof(pinfo), &rsize);
+    if (ret)
         Output("Wince reports processor: core=%ls name=%ls cat=%ls vend=%ls"
                , pinfo.szProcessCore, pinfo.szProcessorName
                , pinfo.szCatalogNumber, pinfo.szVendor);
