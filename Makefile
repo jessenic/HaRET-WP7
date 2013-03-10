@@ -135,7 +135,7 @@ $(OUT)haret-debug: $(addprefix $(OUT),$(HARETOBJS)) src/haret.lds
 
 $(OUT)kmodedll.dll:
 	$(call compile,src/kmodedll/kmode_dll.cpp,$(OUT)kmode_dll.o -DBUILDING_KMODE_DLL)
-	$(CXX) $(LDFLAGS) -shared -o $(OUT)kmodedll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmodedll.a
+	$(CXX) $(LDFLAGS) -s -shared -o $(OUT)kmodedll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmodedll.a
 	
 $(OUT)libKMDriverWrapper.a:
 	$(DLLTOOL) $(DLLTOOLFLAGS) -D KMDriverWrapper.dll -d lib/KMDriverWrapper.def -l $(OUT)libKMDriverWrapper.a
