@@ -3,12 +3,13 @@
 #include "pkfuncs.h"
 #include "kernelmodestuff.h"
 #include "StructDll1.h"
+#include "output.h"
 
 bool InitKMDriver() {
-	return WP7InitDriverAPI() && WP7LoadDriver(L"Drivers\\BuiltIn\\KMDriver");
+	return WP7LoadDriver() && WP7InitDriverAPI();
 }
 bool DeinitKMDriver() {
-	return WP7DeinitDriverAPI() && WP7UnloadDriver(L"KMD1:");
+	return WP7DeinitDriverAPI() && WP7UnloadDriver();
 }
 
 PROCESSOR_INFO GetProcInfo() {
@@ -18,5 +19,6 @@ PROCESSOR_INFO GetProcInfo() {
 	int status = RunInKernelMode(L"KGetProcInfo", (void * )&vs,
 			sizeof(vs), (void * )&procinfo,
 			sizeof(procinfo), szTraceMsg, sizeof(szTraceMsg) - 2);
+	Output("GetProcInfo returned %i", status);
 	return procinfo;
 }
