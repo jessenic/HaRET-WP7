@@ -26,9 +26,9 @@ LDFLAGS = -Wl,--major-subsystem-version=2,--minor-subsystem-version=10 -static-l
 # LDFLAGS to debug invalid imports in exe
 #LDFLAGS = -Wl,-M -Wl,--cref
 
-LIBS = -lwinsock -lKMDriverWrapper -Llib/
+LIBS = -lwinsock -lKMDriverWrapper -L$(OUT)
 
-all: $(OUT) $(OUT)kmode_dll.dll $(OUT)haret.exe $(OUT)haretconsole.tar.gz
+all: $(OUT) $(OUT)kmode_dll.dll $(OUT)libKMDriverWrapper.a $(OUT)haret.exe $(OUT)haretconsole.tar.gz
 
 # Run with "make V=1" to see the actual compile commands
 ifdef V
@@ -136,6 +136,9 @@ $(OUT)haret-debug: $(addprefix $(OUT),$(HARETOBJS)) src/haret.lds
 $(OUT)kmode_dll.dll:
 	$(call compile,src/kmodedll/kmode_dll.cpp,$(OUT)kmode_dll.o -DBUILDING_KMODE_DLL)
 	$(CXX) $(LDFLAGS) -shared -o $(OUT)kmode_dll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmode_dll.a
+	
+$(OUT)libKMDriverWrapper.a:
+	$(DLLTOOL) $(DLLTOOLFLAGS) -D KMDriverWrapper.dll -d lib/KMDriverWrapper.def -l $(OUT)libKMDriverWrapper.a
 
 ####### Stripped down linux bootloading program.
 LINLOADOBJS := $(COREOBJS) stubboot.o kernelfiles.o
