@@ -28,7 +28,7 @@ LDFLAGS = -Wl,--major-subsystem-version=2,--minor-subsystem-version=10 -static-l
 
 LIBS = -lwinsock -lKMDriverWrapper -L$(OUT)
 
-all: $(OUT) $(OUT)kmode_dll.dll $(OUT)libKMDriverWrapper.a $(OUT)haret.exe $(OUT)haretconsole.tar.gz
+all: $(OUT) $(OUT)kmodedll.dll $(OUT)libKMDriverWrapper.a $(OUT)haret.exe $(OUT)haretconsole.tar.gz
 
 # Run with "make V=1" to see the actual compile commands
 ifdef V
@@ -133,9 +133,9 @@ $(OUT)haret-debug: $(addprefix $(OUT),$(HARETOBJS)) src/haret.lds
 
 ################ Kernel mode dll rules
 
-$(OUT)kmode_dll.dll:
+$(OUT)kmodedll.dll:
 	$(call compile,src/kmodedll/kmode_dll.cpp,$(OUT)kmode_dll.o -DBUILDING_KMODE_DLL)
-	$(CXX) $(LDFLAGS) -shared -o $(OUT)kmode_dll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmode_dll.a
+	$(CXX) $(LDFLAGS) -shared -o $(OUT)kmodedll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmodedll.a
 	
 $(OUT)libKMDriverWrapper.a:
 	$(DLLTOOL) $(DLLTOOLFLAGS) -D KMDriverWrapper.dll -d lib/KMDriverWrapper.def -l $(OUT)libKMDriverWrapper.a

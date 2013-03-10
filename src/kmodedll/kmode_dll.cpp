@@ -2,9 +2,9 @@
 #include "pkfuncs.h" // KernelIoControl
 #include "kmode_dll.h"
 
-int DllEntry(HINSTANCE DllInstance, ULONG Reason, LPVOID Reserved) {
-	return TRUE;
-}
+//int DllEntry(HINSTANCE DllInstance, ULONG Reason, LPVOID Reserved) {
+//	return TRUE;
+//}
 
 //void TRACE_SAVE(TCHAR *format, ...) {
 //	TCHAR szMessage[3000];

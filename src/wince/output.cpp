@@ -225,7 +225,7 @@ Output(const char *format, ...)
     writeLog(buf, len);
 	
 	printf(buf); 
-	printf("\n");
+	//printf("\n");
     outputfn *ofn = getOutputFn();
     if (!ofn && code < 6) {
         Complain(rawbuf, rawlen, code-1);

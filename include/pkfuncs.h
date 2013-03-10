@@ -21,7 +21,7 @@ BOOL FreePhysMem(LPVOID);
 DWORD GetCurrentPermissions(void);
 BOOL KernelIoControl(DWORD,LPVOID,DWORD,LPVOID,DWORD,LPDWORD);
 BOOL LockPages(LPVOID,DWORD,PDWORD,int);
-BOOL SetKMode(BOOL);
+//BOOL SetKMode(BOOL);
 DWORD SetProcPermissions(DWORD);
 void SleepTillTick();
 BOOL UnlockPages(LPVOID,DWORD);

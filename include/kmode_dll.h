@@ -14,7 +14,7 @@ extern "C" {
 #endif
 
 
-int DllEntry(HINSTANCE DllInstance, ULONG Reason, LPVOID Reserved);
+//int DllEntry(HINSTANCE DllInstance, ULONG Reason, LPVOID Reserved);
 
 unsigned long KGetProcInfo(unsigned char * InStructurePointer, unsigned long InStructureLength, unsigned char * OutStructurePointer, unsigned long OutStructureLength);
 
