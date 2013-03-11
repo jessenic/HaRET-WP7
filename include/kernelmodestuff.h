@@ -1,7 +1,7 @@
 #ifndef _KERNELMODESTUFF_H
 #define _KERNELMODESTUFF_H
 #include "pkfuncs.h"
-#include "KMDriverApi.h"
+#include "KMDriverAPI.h"
 bool InitKMDriver();
 bool DeinitKMDriver();
 PROCESSOR_INFO GetProcInfo();
