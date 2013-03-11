@@ -48,13 +48,23 @@ vpath %.rc src/wince
 BASE ?= /opt/mingw32ce
 export BASE
 
-RC = arm-mingw32ce-windres
+#Try to see if g++ is found from BASE if not use PATH
+
+GPPOUTTEST := $(shell $(BASE)/bin/arm-mingw32ce-g++ 2>&1)
+ifeq (arm-mingw32ce-g++: no input files,$(GPPOUTTEST))
+  GCCBINDIR = $(BASE)/bin/
+else
+  GCCBINDIR =
+endif
+export GCCBINDIR
+
+RC = $(GCCBINDIR)arm-mingw32ce-windres
 RCFLAGS = -r -l 0x409 -Iinclude
 
-CXX = arm-mingw32ce-g++
-STRIP = arm-mingw32ce-strip
+CXX = $(GCCBINDIR)arm-mingw32ce-g++
+STRIP = $(GCCBINDIR)arm-mingw32ce-strip
 
-DLLTOOL = arm-mingw32ce-dlltool
+DLLTOOL = $(GCCBINDIR)arm-mingw32ce-dlltool
 DLLTOOLFLAGS =
 
 define compile_armv4
