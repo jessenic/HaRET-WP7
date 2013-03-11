@@ -16,3 +16,7 @@
 *.jpg binary
 *.bmp binary
 *.ico binary
+*.bz2 binary
+*.tar binary
+*.zip binary
+
