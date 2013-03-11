@@ -7,6 +7,7 @@
 *.h text
 *.py text
 *.cpp text
+*.def text
 
 # Declare files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf
@@ -19,4 +20,5 @@
 *.bz2 binary
 *.tar binary
 *.zip binary
-
+*.dll binary
+*.exe binary

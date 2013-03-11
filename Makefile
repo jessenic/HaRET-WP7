@@ -26,9 +26,9 @@ LDFLAGS = -Wl,--major-subsystem-version=2,--minor-subsystem-version=10 -static-l
 # LDFLAGS to debug invalid imports in exe
 #LDFLAGS = -Wl,-M -Wl,--cref
 
-LIBS = -lwinsock -lKMDriverWrapper -L$(OUT)
+LIBS = -lwinsock -lKMDriverWrapper -L$(OUT)obj/
 
-all: $(OUT) $(OUT)kmodedll.dll $(OUT)libKMDriverWrapper.a $(OUT)haret.exe $(OUT)haretconsole.tar.gz
+all: $(OUT) $(OUT)Windows/kmodedll.dll $(OUT)obj/libKMDriverWrapper.a $(OUT)haret.exe $(OUT)haretconsole.tar.gz $(OUT)Windows/KMDriver.dll $(OUT)Windows/KMDriverWrapper.dll $(OUT)KMDriver.reg
 
 # Run with "make V=1" to see the actual compile commands
 ifdef V
@@ -92,24 +92,24 @@ $(if $(findstring -armv6.,$1),
 )
 endef
 
-$(OUT)%.o: %.cpp ; $(call compile,$<,$@)
-$(OUT)%.o: %.S ; $(call compile,$<,$@)
+$(OUT)obj/%.o: %.cpp ; $(call compile,$<,$@)
+$(OUT)obj/%.o: %.S ; $(call compile,$<,$@)
 
-$(OUT)%.o: %.rc
+$(OUT)obj/%.o: %.rc
 	@echo "  Building resource file from $<"
 	$(Q)$(RC) $(RCFLAGS) -i $< -o $@
 
-$(OUT)%.lib: src/wince/%.def
+$(OUT)obj/%.lib: src/wince/%.def
 	@echo "  Building library $@"
 	$(Q)$(DLLTOOL) $(DLLTOOLFLAGS) -d $< -l $@
 
 $(OUT)%-debug:
-	$(Q)echo 'const char *VERSION = "$(VERSION)";' > $(OUT)version.cpp
-	$(call compile,$(OUT)version.cpp,$(OUT)version.o)
+	$(Q)echo 'const char *VERSION = "$(VERSION)";' > $(OUT)obj/version.cpp
+	$(call compile,$(OUT)obj/version.cpp,$(OUT)obj/version.o)
 	@echo "  Checking for relocations"
 	$(Q)tools/checkrelocs $(filter %.o,$^)
 	@echo "  Linking $@ (Version \"$(VERSION)\")"
-	$(Q)$(CXX) $(LDFLAGS) $(OUT)version.o $^ $(LIBS) -o $@
+	$(Q)$(CXX) $(LDFLAGS) $(OUT)obj/version.o $^ $(LIBS) -o $@
 
 $(OUT)%.exe: $(OUT)%-debug
 	@echo "  Stripping $^ to make $@"
@@ -124,10 +124,10 @@ MACHOBJS := machines.o \
   arch-pxa27x.o arch-pxa.o arch-sa.o arch-omap.o arch-s3.o arch-msm.o \
   arch-imx.o arch-centrality.o arch-arm.o arch-msm-asm.o
 
-$(OUT)mach-autogen.o: src/mach/machlist.txt
+$(OUT)obj/mach-autogen.o: src/mach/machlist.txt
 	@echo "  Building machine list"
-	$(Q)tools/buildmachs.py < $^ > $(OUT)mach-autogen.cpp
-	$(call compile,$(OUT)mach-autogen.cpp,$@)
+	$(Q)tools/buildmachs.py < $^ > $(OUT)obj/mach-autogen.cpp
+	$(call compile,$(OUT)obj/mach-autogen.cpp,$@)
 
 COREOBJS := $(MACHOBJS) haret-res.o libcfunc.o \
   script.o memory.o video.o asmstuff.o lateload.o output.o cpu.o \
@@ -139,16 +139,24 @@ HARETOBJS := $(COREOBJS) haret.o gpio.o uart.o wincmds.o \
   network.o terminal.o com_port.o tlhcmds.o memcmds.o pxacmds.o aticmds.o \
   imxcmds.o s3c-gpio.o msmcmds.o kernelmodestuff.o
 
-$(OUT)haret-debug: $(addprefix $(OUT),$(HARETOBJS)) src/haret.lds
+$(OUT)haret-debug: $(addprefix $(OUT)obj/,$(HARETOBJS)) src/haret.lds
 
 ################ Kernel mode dll rules
 
-$(OUT)kmodedll.dll: src/kmodedll/*.*
-	$(call compile,src/kmodedll/kmode_dll.cpp,$(OUT)kmode_dll.o -DBUILDING_KMODE_DLL)
-	$(Q)$(CXX) $(LDFLAGS) -s -shared -o $(OUT)kmodedll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmodedll.a
+$(OUT)Windows/kmodedll.dll: src/kmodedll/*.*
+	$(call compile,src/kmodedll/kmode_dll.cpp,$(OUT)obj/kmode_dll.o -DBUILDING_KMODE_DLL)
+	@echo "Linking kmodedll.dll"
+	$(Q)$(CXX) $(LDFLAGS) -s -shared -o $(OUT)Windows/kmodedll.dll $(OUT)obj/kmode_dll.o -Wl,--out-implib,$(OUT)obj/libkmodedll.a
 	
-$(OUT)libKMDriverWrapper.a: lib/KMDriverWrapper.def
-	$(DLLTOOL) $(DLLTOOLFLAGS) -D KMDriverWrapper.dll -d lib/KMDriverWrapper.def -l $(OUT)libKMDriverWrapper.a
+$(OUT)obj/libKMDriverWrapper.a: lib/KMDriverWrapper.def
+	$(Q)$(DLLTOOL) $(DLLTOOLFLAGS) -D KMDriverWrapper.dll -d lib/KMDriverWrapper.def -l $(OUT)obj/libKMDriverWrapper.a
+
+$(OUT)Windows/KMDriver.dll: lib/KMDriver.dll
+	$(Q)cp $< $@
+$(OUT)Windows/KMDriverWrapper.dll: lib/KMDriverWrapper.dll
+	$(Q)cp $< $@
+$(OUT)KMDriver.reg: lib/KMDriver.reg
+	$(Q)cp $< $@
 
 ####### Stripped down linux bootloading program.
 LINLOADOBJS := $(COREOBJS) stubboot.o kernelfiles.o
@@ -157,11 +165,11 @@ KERNEL := zImage
 INITRD := /dev/null
 SCRIPT := docs/linload.txt
 
-$(OUT)kernelfiles.o: src/wince/kernelfiles.S FORCE
+$(OUT)obj/kernelfiles.o: src/wince/kernelfiles.S FORCE
 	@echo "  Building $@"
 	$(Q)$(CXX) -c -DLIN_KERNEL=\"$(KERNEL)\" -DLIN_INITRD=\"$(INITRD)\" -DLIN_SCRIPT=\"$(SCRIPT)\" -o $@ $<
 
-$(OUT)oldlinload-debug: $(addprefix $(OUT), $(LINLOADOBJS)) src/haret.lds
+$(OUT)oldlinload-debug: $(addprefix $(OUT)obj/, $(LINLOADOBJS)) src/haret.lds
 
 oldlinload: $(OUT)oldlinload.exe
 
@@ -179,10 +187,14 @@ $(OUT)haretconsole.tar.gz: $(wildcard $(addprefix haretconsole/, $(HC_FILES)))
 
 ####### Generic rules
 clean:
-	rm -rf $(OUT)
+	@echo "Cleaning output directory $(OUT)"
+	$(Q)rm -rf $(OUT)
 
 $(OUT):
-	mkdir $@
+	@echo "Generating output directories at $@"
+	$(Q)mkdir $@
+	$(Q)mkdir $@/obj
+	$(Q)mkdir $@/Windows
 
 -include $(OUT)*.d
 
