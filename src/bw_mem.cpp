@@ -60,7 +60,7 @@ bw_mem(int nbytes, char *mode)
 	}
         buf = (TYPE *)malloc(nbytes);
 	if (!buf) {
-		Output (L"Cannot allocate %d bytes of memory", nbytes);
+		Output ("Cannot allocate %d bytes of memory", nbytes);
 		exit(1);
 	}
 	lastone = (TYPE*)((char *)buf + nbytes - 512);
@@ -68,7 +68,7 @@ bw_mem(int nbytes, char *mode)
 	    streq(mode, "fcp") || streq(mode, "bcopy")) {
         	buf2 = (TYPE *)malloc(nbytes + 2048);
 		if (!buf2) {
-			Output (L"Cannot allocate %d bytes of memory", nbytes + 2048);
+			Output ("Cannot allocate %d bytes of memory", nbytes + 2048);
 			free (buf);
 			return;
 		}

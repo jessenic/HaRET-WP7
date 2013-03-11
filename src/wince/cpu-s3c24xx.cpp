@@ -19,7 +19,13 @@
 #include "cpu.h"
 #include "uart.h"
 #include "resource.h"
-#include "s3c24xx.h"
+
+//#include "s3c24xx.h"
+//Fix for Eclipse:
+#include "s3c24xx/map.h"
+#include "s3c24xx/regs-dma.h"
+#include "s3c24xx/regs-gpio.h"
+#include "s3c24xx/regs-serial.h"
 
 static uint32 *s3c_gpio;
 
@@ -164,7 +170,8 @@ static void UART_s3c2410_puts (char *s)
 
 static bool s3c24xxDetect ()
 {
-  uint32 p15r0 = cpuGetCP (15, 0);
+  //TODO: Fix this if ever needed, uncommented due to Eclipse errors
+  //uint32 p15r0 = cpuGetCP (15, 0);
 
   // please add proper detection for Samsung CPUs
 #if 0
