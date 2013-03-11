@@ -195,16 +195,16 @@ static int s3c24xxSetupLoad (void)
   {
     case S3C2410_GSTATUS1_2410:
       UART_setDriver(&s3c2410_uarts);
-      Output(L"Detected S3C2410, Version %d\n", s3c_ver & ~S3C2410_GSTATUS1_IDMASK);
+      Output("Detected S3C2410, Version %d\n", s3c_ver & ~S3C2410_GSTATUS1_IDMASK);
       break;
 
     case S3C2410_GSTATUS1_2440:
       UART_setDriver(&s3c2440_uarts);
-      Output(L"Detected S3C2440, Version %d\n", s3c_ver & ~S3C2410_GSTATUS1_IDMASK);
+      Output("Detected S3C2440, Version %d\n", s3c_ver & ~S3C2410_GSTATUS1_IDMASK);
       break;
   
     default:
-      Output(L"Unknown S3C24XX, ID 0x%08x\n", s3c_ver);
+      Output("Unknown S3C24XX, ID 0x%08x\n", s3c_ver);
   }
 
   return 0;
@@ -235,7 +235,7 @@ static void s3c24xxShutdownDMA (void)
     dmasktrig = s3c_readl(ch, S3C2410_DMA_DMASKTRIG);
     if (dmasktrig & S3C2410_DMASKTRIG_ON)
     {
-      Output(L"DMA[%d] - shutting down active DMA\n", dma_ch);
+      Output("DMA[%d] - shutting down active DMA\n", dma_ch);
 
       s3c_writel(ch, S3C2410_DMA_DMASKTRIG, S3C2410_DMASKTRIG_STOP);
 
@@ -248,7 +248,7 @@ static void s3c24xxShutdownDMA (void)
           break;
 
         if (timeo-- <= 0)
-          Output(L"DMA[%d] - timeout waiting to stop\n", dma_ch);
+          Output("DMA[%d] - timeout waiting to stop\n", dma_ch);
       }
     }
   }

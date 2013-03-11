@@ -163,7 +163,7 @@ bandwidth(uint64 bytes, uint64 times)
 	secs /= 1000000;
 	secs /= times;
 	mb = bytes / MB;
-	Output (L"%.4f MB in %.4f secs, %.4f MB/sec",	mb, secs, mb/secs);
+	Output ("%.4f MB in %.4f secs, %.4f MB/sec",	mb, secs, mb/secs);
 }
 
 void
@@ -175,7 +175,7 @@ kb(uint64 bytes)
 	tvsub(&td, &stop_tv, &start_tv);
 	s = td.tv_sec + td.tv_usec / 1000000.0;
 	bs = bytes / nz(s);
-	Output(L"%.0f KB/sec", bs / KB);
+	Output("%.0f KB/sec", bs / KB);
 }
 
 void
@@ -187,7 +187,7 @@ mb(uint64 bytes)
 	tvsub(&td, &stop_tv, &start_tv);
 	s = td.tv_sec + td.tv_usec / 1000000.0;
 	bs = bytes / nz(s);
-	Output(L"%.2f MB/sec", bs / MB);
+	Output("%.2f MB/sec", bs / MB);
 }
 
 void
@@ -199,22 +199,22 @@ latency(uint64 xfers, uint64 size)
 	tvsub(&td, &stop_tv, &start_tv);
 	s = td.tv_sec + td.tv_usec / 1000000.0;
 	if (xfers > 1) {
-		Output(L"%d %dKB xfers in %.2f secs, \t",
+		Output("%d %dKB xfers in %.2f secs, \t",
 		    (int) xfers, (int) (size / KB), s);
 	} else {
-		Output(L"%.1fKB in \t", size / KB);
+		Output("%.1fKB in \t", size / KB);
 	}
 	if ((s * 1000 / xfers) > 100) {
-		Output(L"%.0f millisec%hs, \t",
+		Output("%.0f millisec%hs, \t",
 		    s * 1000 / xfers, xfers > 1 ? "/xfer" : "s");
 	} else {
-		Output(L"%.4f millisec%hs, \t",
+		Output("%.4f millisec%hs, \t",
 		    s * 1000 / xfers, xfers > 1 ? "/xfer" : "s");
 	}
 	if (((xfers * size) / (MB * s)) > 1) {
-		Output(L"%.2f MB/sec", (xfers * size) / (MB * s));
+		Output("%.2f MB/sec", (xfers * size) / (MB * s));
 	} else {
-		Output(L"%.2f KB/sec", (xfers * size) / (KB * s));
+		Output("%.2f KB/sec", (xfers * size) / (KB * s));
 	}
 }
 
@@ -226,7 +226,7 @@ context(uint64 xfers)
 
 	tvsub(&td, &stop_tv, &start_tv);
 	s = td.tv_sec + td.tv_usec / 1000000.0;
-	Output(L"%d context switches in %.2f secs, %.0f microsec/switch",
+	Output("%d context switches in %.2f secs, %.0f microsec/switch",
 	    (int)xfers, s, s * 1000000 / xfers);
 }
 
@@ -239,7 +239,7 @@ nano(char *s, uint64 n)
 	tvsub(&td, &stop_tv, &start_tv);
 	micro = td.tv_sec * 1000000 + td.tv_usec;
 	micro *= 1000;
-	Output(L"%s: %.0f nanoseconds", s, micro / n);
+	Output("%s: %.0f nanoseconds", s, micro / n);
 }
 
 void
@@ -251,7 +251,7 @@ micro(char *s, uint64 n)
 	tvsub(&td, &stop_tv, &start_tv);
 	micro = td.tv_sec * 1000000 + td.tv_usec;
 	micro /= n;
-	Output(L"%hs: %.4f microseconds", s, micro);
+	Output("%hs: %.4f microseconds", s, micro);
 }
 
 void
@@ -266,9 +266,9 @@ micromb(uint64 sz, uint64 n)
 	mb = (double)sz;
 	mb /= MB;
 	if (micro >= 10) {
-		Output(L"%.6f %.0f", mb, micro);
+		Output("%.6f %.0f", mb, micro);
 	} else {
-		Output(L"%.6f %.3f", mb, micro);
+		Output("%.6f %.3f", mb, micro);
 	}
 }
 
@@ -281,7 +281,7 @@ milli(char *s, uint64 n)
 	tvsub(&td, &stop_tv, &start_tv);
 	milli = td.tv_sec * 1000 + td.tv_usec / 1000;
 	milli /= n;
-	Output(L"%s: %d milliseconds", s, (int)milli);
+	Output("%s: %d milliseconds", s, (int)milli);
 }
 
 void
@@ -292,7 +292,7 @@ ptime(uint64 n)
 
 	tvsub(&td, &stop_tv, &start_tv);
 	s = td.tv_sec + td.tv_usec / 1000000.0;
-	Output(L"%d in %.2f secs, %.0f microseconds each",
+	Output("%d in %.2f secs, %.0f microseconds each",
 	    (int)n, s, s * 1000000 / n);
 }
 
