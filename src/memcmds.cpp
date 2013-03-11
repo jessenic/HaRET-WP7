@@ -489,7 +489,7 @@ int parseL1Entry(uint32 mb, uint32 l1d, uint32 pL1,
         pi2->flagfunc(flagbuf, l2d & ~pi2->mask);
 
         if (!pi2->isMapped) {
-            if (showall && (l2d ^ pL2) & MMU_L2_TYPE_MASK){
+            if (showall && ((l2d ^ pL2) & MMU_L2_TYPE_MASK)){
                 Output(" %08x |          | %13s |", l2vaddr, pi2->name);
                 linesOut++;
             }

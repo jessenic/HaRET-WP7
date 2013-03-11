@@ -181,7 +181,7 @@ static void gpioWatch (uint seconds)
       {
         uint32 changes = old_gafr [i] ^ val;
         for (j = 0; j < 16; j++)
-          if (changes & (3 << j * 2)
+          if ((changes & (3 << j * 2))
 	   && ((i * 32 + j) <= 83))
 	  {
             Screen("GAFR[%d] changed to %d", i * 16 + j, (changes >> j * 2) & 3);
