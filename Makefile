@@ -143,9 +143,9 @@ $(OUT)haret-debug: $(addprefix $(OUT),$(HARETOBJS)) src/haret.lds
 
 ################ Kernel mode dll rules
 
-$(OUT)kmodedll.dll:
+$(OUT)kmodedll.dll: src/kmodedll/*.*
 	$(call compile,src/kmodedll/kmode_dll.cpp,$(OUT)kmode_dll.o -DBUILDING_KMODE_DLL)
-	$(CXX) $(LDFLAGS) -s -shared -o $(OUT)kmodedll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmodedll.a
+	$(Q)$(CXX) $(LDFLAGS) -s -shared -o $(OUT)kmodedll.dll $(OUT)kmode_dll.o -Wl,--out-implib,$(OUT)libkmodedll.a
 	
 $(OUT)libKMDriverWrapper.a:
 	$(DLLTOOL) $(DLLTOOLFLAGS) -D KMDriverWrapper.dll -d lib/KMDriverWrapper.def -l $(OUT)libKMDriverWrapper.a
